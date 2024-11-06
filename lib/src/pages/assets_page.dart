@@ -78,7 +78,16 @@ class _AssetsPageState extends State<AssetsPage> {
             ? SvgPicture.asset('assets/svgs/codepen.svg')
             : SvgPicture.asset('assets/svgs/cube.svg');
 
-    // Exibe o item atual
+    final iconStatus;
+    if (asset.containsKey('status') && asset['status'] != null) {
+      iconStatus = asset['status'] == "operating"
+          ? SvgPicture.asset('assets/svgs/bolt.svg')
+          : SvgPicture.asset('assets/svgs/ellipse.svg');
+    } else {
+      iconStatus = SizedBox(width: 8);
+    }
+
+
     List<Widget> itemList = [
       Padding(
         padding: EdgeInsets.fromLTRB(indent, 6, 0, 6),
@@ -94,6 +103,8 @@ class _AssetsPageState extends State<AssetsPage> {
                 style: const TextStyle(fontSize: 18),
               ),
             ),
+            const SizedBox(width: 8),
+            iconStatus
           ],
         ),
       ),
@@ -141,7 +152,6 @@ class _AssetsPageState extends State<AssetsPage> {
                         filled: true,
                         contentPadding: const EdgeInsets.symmetric(
                             vertical: 12.0, horizontal: 16.0),
-                        // Ajusta o padding interno
                         prefixIcon: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: SvgPicture.asset(
@@ -153,6 +163,61 @@ class _AssetsPageState extends State<AssetsPage> {
                       ),
                     ),
                     const SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        SizedBox(
+                          width: 200, // Defina a largura do botão
+                          child: ElevatedButton(
+                            onPressed: () {},
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5),
+                                side: const BorderSide(
+                                  color: Colors.blue,
+                                  width: 2,
+                                ),
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(14, 6, 0, 6),
+                              child: Row(
+                                children: [
+                                  SvgPicture.asset('assets/svgs/energy.svg'),
+                                  const SizedBox(width: 8),
+                                  const Text("Sensor de Energia"),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 150,
+                          child: ElevatedButton(
+                            onPressed: () {},
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5),
+                                side: const BorderSide(
+                                  color: Colors.blue,
+                                  width: 2,
+                                ),
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(14, 6, 16, 6),
+                              child: Row(
+                                children: [
+                                  SvgPicture.asset('assets/svgs/exclamation.svg'),
+                                  const SizedBox(width: 8),
+                                  const Text("Crítico"),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                     store.value!.renderList!.isNotEmpty
                         ? _buildAssetTree(store.value!.renderList!)
                         : const Text('Nenhum asset disponível'),
