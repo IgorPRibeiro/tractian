@@ -1,0 +1,52 @@
+HOME:
+- LISTAR COMPANIES http://fake-api.tractian.com/companies E NAVEGAR COM BASE NA SELECAO DA COMPANIE (armazenar ID)
+
+ASSETS:
+- LISTAR ASSETS E LOCATIONS COM BASE NO ID DA COMPANIE SELECIONADA
+    - LOCATIONS: (http://fake-api.tractian.com/companies/${COMPANY_ID}/locations)
+    - ASSETS: (http://fake-api.tractian.com/companies/${COMPANY_ID}/assets)
+
+1 - Primeiro devemos listar todos as LOCATIONS;
+    - Podemos encontrar SUB-locations;
+2 - Associar os ASSETS aos seus respectivos LOCATIONS;
+    - Podemos encontrar SUB-ASSETS então deve ser um array
+    - Podemos encontrar um assets sem um location
+
+3 - Assiciar os COMPONENTS as suas ASSETS
+    - Podemos econtrar um COMPONENT sem estar associado a um ASSETS e esta diretamente associado a um LOCATION
+
+
+No store de Assets iremos juntar as informacoes(assets e locations) em apenas um array formatado dessa maneira para a visualizacao:
+- Root
+  |
+  └── Location A
+  |     |
+  |     ├── Asset 1
+  |     |     ├── Component A1
+  |     |     ├── Component A2
+  |     |
+  |     ├── Asset 2
+  |           ├── Component B1
+  |           ├── Component B2
+  |
+  ├── Location B
+  |     ├── Location C
+  |     |     |
+  |     |     ├── Asset 3
+  |     |     |     ├── Component C1
+  |     |     |     ├── Component C2
+  |     |     |
+  |     |     ├── Component D1
+  |
+  └── Component X
+
+
+
+pasta repositories:
+responsavel para pegar tudo que é externo (como requests)
+
+location: {
+    id
+    name,
+    child: []
+}
