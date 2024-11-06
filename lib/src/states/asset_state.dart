@@ -44,30 +44,38 @@ class AssetState {
   final TypeFilter? typeFilter;
   final List<LocationStateModel>? locations;
   final List<Map<String, dynamic>>? renderList;
+  final List<Map<String, dynamic>>? initialRenderList;
+
 
 
   AssetState({
     this.search,
     this.typeFilter,
     required this.locations,
-    this.renderList
+    this.renderList,
+    this.initialRenderList,
+
   });
 
   factory AssetState.init() {
-    return AssetState(search: null, typeFilter: null, locations: const [], renderList: null);
+    return AssetState(search: null, typeFilter: null, locations: const [], renderList: null, initialRenderList:null );
   }
 
   AssetState copyWith(
       {String? search,
       TypeFilter? typeFilter,
       List<LocationStateModel>? locations,
-      List<Map<String, dynamic>>? renderList
+      List<Map<String, dynamic>>? renderList,
+      List<Map<String, dynamic>>? initialRenderList
+
       }) {
     return AssetState(
         search: search ?? this.search,
-        typeFilter: typeFilter ?? this.typeFilter,
+        typeFilter: typeFilter == null ? null : typeFilter ?? this.typeFilter,
         locations: locations ?? this.locations,
-        renderList: renderList ??  this.renderList
+        renderList: renderList ??  this.renderList,
+        initialRenderList: initialRenderList ??  this.initialRenderList
+
     );
   }
 }

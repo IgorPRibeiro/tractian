@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:tractian/src/states/asset_state.dart';
 import 'package:tractian/src/stores/assets_store.dart';
 
 class ScreenArguments {
@@ -21,6 +22,7 @@ class _AssetsPageState extends State<AssetsPage> {
   ScreenArguments? args;
   final store = AssetsStore();
   bool isInitialized = false;
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -46,8 +48,15 @@ class _AssetsPageState extends State<AssetsPage> {
 
   @override
   void dispose() {
+    _searchController.dispose();
     store.removeListener(_listener);
     super.dispose();
+  }
+
+  void _searchByName(String name) {
+    final assets = store.value.initialRenderList ?? [];
+    store.searchAssetByName(assets, name);
+
   }
 
   Widget _buildAssetTree(List<dynamic> assets) {
@@ -87,7 +96,6 @@ class _AssetsPageState extends State<AssetsPage> {
       iconStatus = SizedBox(width: 8);
     }
 
-
     List<Widget> itemList = [
       Padding(
         padding: EdgeInsets.fromLTRB(indent, 6, 0, 6),
@@ -125,7 +133,7 @@ class _AssetsPageState extends State<AssetsPage> {
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(
-          color: Colors.white, // Muda a cor do ícone
+          color: Colors.white,
         ),
         title: const Text(
           'Assets',
@@ -161,16 +169,30 @@ class _AssetsPageState extends State<AssetsPage> {
                           ),
                         ),
                       ),
+                      onChanged: (text) {
+                        _searchByName(text);
+                      },
+                      controller: _searchController,
                     ),
                     const SizedBox(height: 16),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
                         SizedBox(
-                          width: 200, // Defina a largura do botão
+                          width: 200,
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              if (store.value.typeFilter == TypeFilter.energy) {
+                                store.changeFilter(null);
+                              } else {
+                                store.changeFilter(TypeFilter.energy);
+                              }
+                            },
                             style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  store.value.typeFilter == TypeFilter.energy
+                                      ? Color.fromRGBO(33, 136, 255, 1)
+                                      : Colors.white,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5),
                                 side: const BorderSide(
@@ -185,7 +207,14 @@ class _AssetsPageState extends State<AssetsPage> {
                                 children: [
                                   SvgPicture.asset('assets/svgs/energy.svg'),
                                   const SizedBox(width: 8),
-                                  const Text("Sensor de Energia"),
+                                  Text(
+                                    "Sensor de Energia",
+                                    style: TextStyle(
+                                        color: store.value.typeFilter ==
+                                                TypeFilter.energy
+                                            ? Colors.white
+                                            : Colors.black),
+                                  ),
                                 ],
                               ),
                             ),
@@ -194,8 +223,18 @@ class _AssetsPageState extends State<AssetsPage> {
                         SizedBox(
                           width: 150,
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              if (store.value.typeFilter == TypeFilter.critic) {
+                                store.changeFilter(null);
+                              } else {
+                                store.changeFilter(TypeFilter.critic);
+                              }
+                            },
                             style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  store.value.typeFilter == TypeFilter.critic
+                                      ? Color.fromRGBO(33, 136, 255, 1)
+                                      : Colors.white,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5),
                                 side: const BorderSide(
@@ -208,9 +247,17 @@ class _AssetsPageState extends State<AssetsPage> {
                               padding: const EdgeInsets.fromLTRB(14, 6, 16, 6),
                               child: Row(
                                 children: [
-                                  SvgPicture.asset('assets/svgs/exclamation.svg'),
+                                  SvgPicture.asset(
+                                      'assets/svgs/exclamation.svg'),
                                   const SizedBox(width: 8),
-                                  const Text("Crítico"),
+                                  Text(
+                                    "Crítico",
+                                    style: TextStyle(
+                                        color: store.value.typeFilter ==
+                                                TypeFilter.critic
+                                            ? Colors.white
+                                            : Colors.black),
+                                  ),
                                 ],
                               ),
                             ),

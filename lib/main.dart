@@ -12,10 +12,11 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData.light(useMaterial3: true),
       initialRoute: '/',
       routes: {
-        '/': (context) =>  HomePage(),
+        '/': (context) => const HomePage(),
         AssetsPage.routeName: (context) => const AssetsPage(),
       },
     );
